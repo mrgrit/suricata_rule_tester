@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="p-4 bg-white rounded-2xl shadow">
+    <h2 class="font-semibold mb-2">Quick Actions</h2>
+    <div class="space-x-2">
+      <a href="/pcaps" class="px-3 py-2 bg-slate-800 text-white rounded-xl">Choose PCAP</a>
+      <a href="/suricata" class="px-3 py-2 bg-slate-200 rounded-xl">View Logs</a>
+    </div>
+  </div>
+  <div class="p-4 bg-white rounded-2xl shadow">
+    <h2 class="font-semibold mb-2">Recent Actions</h2>
+    <div id="logs" hx-get="/logs" hx-trigger="load, every 5s" hx-target="#logs" hx-swap="innerHTML"></div>
+  </div>
+</div>
+{% endblock %}

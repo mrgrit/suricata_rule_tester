@@ -1,0 +1,5 @@
+<div class="bg-white p-4 rounded-2xl shadow">
+  <h3 class="font-semibold mb-2">Replay Result</h3>
+  <pre class="text-sm whitespace-pre-wrap">{{ stdout }}</pre>
+  {% if stderr %}<details class="mt-2"><summary class="text-red-600">stderr</summary><pre class="text-xs whitespace-pre-wrap">{{ stderr }}</pre></details>{% endif %}
+</div>

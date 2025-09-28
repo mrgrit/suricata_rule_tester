@@ -1,0 +1,3 @@
+{% for row in rows %}
+<div class="text-xs text-slate-700"><span class="font-mono">{{ row.created_at }}</span> — <b>{{ row.action }}</b> — {{ row.detail }} (rc={{ row.exit_code }})</div>
+{% endfor %}

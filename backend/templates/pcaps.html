@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="text-xl font-semibold mb-3">PCAP Browser</h2>
+<div class="mb-3 text-sm">
+  <div class="inline-flex items-center gap-2 px-2 py-1 bg-white rounded-xl shadow">
+    <span>NIC:</span>
+    <button class="px-2 py-1 bg-slate-100 rounded" 
+      hx-get="/api/nics" hx-headers='{"x-api-key":"{{ api_key }}"}' hx-target="#niclist" hx-swap="innerHTML">List NICs</button>
+  </div>
+  <pre id="niclist" class="text-xs whitespace-pre-wrap mt-2"></pre>
+</div>
+<div id="pcap-tree" class="space-y-4">
+  {% for node in tree %}
+    <div class="bg-white p-4 rounded-2xl shadow">
+      <div class="font-mono text-sm text-slate-600 mb-2">{{ node.dir }}</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {% for f in node.files %}
+        <div class="flex items-center justify-between border p-2 rounded-xl">
+          <span>{{ f }}</span>
+          <div class="space-x-2">
+            <button class="px-2 py-1 bg-slate-100 rounded" 
+              hx-get="/pcaps/ips?dir={{ node.dir }}&file={{ f }}" hx-target="#ip-panel" hx-swap="innerHTML">IPs</button>
+            <button class="px-2 py-1 bg-slate-800 text-white rounded"
+              hx-post="/pcaps/replay" hx-vals='{"dir":"{{ node.dir }}","file":"{{ f }}"}' hx-target="#result" hx-swap="innerHTML">Replay</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<div id="ip-panel" class="mt-6"></div>
+<div id="result" class="mt-6"></div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<div class="bg-white p-4 rounded-2xl shadow">
+  <h3 class="font-semibold mb-2">IP Rewrite (optional)</h3>
+  <form hx-post="/pcaps/rewrite" hx-target="#rewrite-result" hx-swap="innerHTML" class="space-y-3">
+    <input type="hidden" name="dir" value="{{ dir }}"/>
+    <input type="hidden" name="file" value="{{ file }}"/>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <div class="text-sm text-slate-500">Unique src IPs</div>
+        {% for ip in srcs %}
+          <div class="flex items-center space-x-2 mt-1">
+            <code class="px-2 py-1 bg-slate-100 rounded">{{ ip }}</code>
+            <input name="src_{{ ip }}" placeholder="new src for {{ ip }}" class="border px-2 py-1 rounded w-full"/>
+          </div>
+        {% endfor %}
+      </div>
+      <div>
+        <div class="text-sm text-slate-500">Unique dst IPs</div>
+        {% for ip in dsts %}
+          <div class="flex items-center space-x-2 mt-1">
+            <code class="px-2 py-1 bg-slate-100 rounded">{{ ip }}</code>
+            <input name="dst_{{ ip }}" placeholder="new dst for {{ ip }}" class="border px-2 py-1 rounded w-full"/>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <button class="px-3 py-2 bg-slate-800 text-white rounded-xl">Rewrite</button>
+  </form>
+</div>
+<div id="rewrite-result" class="mt-4"></div>

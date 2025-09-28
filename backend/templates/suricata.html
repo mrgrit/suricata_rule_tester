@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="text-xl font-semibold mb-3">Suricata Logs</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="bg-white p-4 rounded-2xl shadow">
+    <h3 class="font-semibold mb-2">fast.log</h3>
+    <form class="mb-2" hx-get="/suricata/logs?file=fast" hx-target="#fastlog">
+      <input class="border px-2 py-1 rounded" name="grep" placeholder="keyword (optional)"/>
+      <button class="px-2 py-1 bg-slate-800 text-white rounded">Search</button>
+    </form>
+    <pre id="fastlog" hx-get="/suricata/logs?file=fast" hx-trigger="load, every 5s" class="text-xs whitespace-pre-wrap h-80 overflow-auto p-2 bg-slate-50 border rounded"></pre>
+  </div>
+  <div class="bg-white p-4 rounded-2xl shadow">
+    <h3 class="font-semibold mb-2">eve.json (tail)</h3>
+    <form class="mb-2" hx-get="/suricata/logs?file=eve" hx-target="#evelog">
+      <input class="border px-2 py-1 rounded" name="grep" placeholder="keyword (optional)"/>
+      <button class="px-2 py-1 bg-slate-800 text-white rounded">Search</button>
+    </form>
+    <pre id="evelog" hx-get="/suricata/logs?file=eve" hx-trigger="load, every 5s" class="text-xs whitespace-pre-wrap h-80 overflow-auto p-2 bg-slate-50 border rounded"></pre>
+    <div class="mt-4">
+      <h3 class="font-semibold mb-2">Quick tcpdump capture</h3>
+      <form hx-post="/suricata/capture" hx-target="#capout">
+        <input class="border px-2 py-1 rounded" name="iface" placeholder="eth0"/>
+        <input class="border px-2 py-1 rounded" name="host" placeholder="10.0.0.1"/>
+        <input class="border px-2 py-1 rounded" name="count" placeholder="20"/>
+        <input class="border px-2 py-1 rounded" name="duration" placeholder="5"/>
+        <button class="px-2 py-1 bg-slate-800 text-white rounded">Run</button>
+      </form>
+      <pre id="capout" class="text-xs whitespace-pre-wrap h-40 overflow-auto p-2 bg-slate-50 border rounded mt-2"></pre>
+    </div>
+  </div>
+</div>
+{% endblock %}
