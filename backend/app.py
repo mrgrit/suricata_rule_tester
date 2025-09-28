@@ -1,12 +1,12 @@
 import os, subprocess
 from fastapi import FastAPI, Request, Form, Query, HTTPException, Header, Body
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import select
 from .settings import SETTINGS
 from .db import get_session, init_db
 from .models import ActionLog
-from .services.pcap import list_pcaps, extract_ips
+from .services.pcap import list_pcaps, extract_ips, preview_rows
 from .services.rewrite import ensure_rewritten_dir, tcprewrite
 from .services.replay import tcpreplay
 from .services.suricata import remote_tail, test_rules, reload_suricata, write_rule_file, tcpdump_capture
@@ -42,6 +42,32 @@ def logs(request: Request):
 def pcaps_page(request: Request):
     tree = list_pcaps()
     return templates.TemplateResponse("pcaps.html", {"request": request, "tree": tree, "api_key": SETTINGS.api_key})
+
+# PCAP 미리보기 페이지
+@app.get("/pcaps/view", response_class=HTMLResponse)
+def pcap_view(request: Request, dir: str = Query(...), file: str = Query(...)):
+    base = os.path.join(SETTINGS.pcap_root, "" if dir == "." else dir)
+    full = os.path.join(base, file)
+    return templates.TemplateResponse(
+        "pcap_view.html",
+        {"request": request, "dir": dir, "file": file, "abs_path": full}
+    )
+
+# 미리보기 테이블(HTMX partial)
+@app.get("/pcaps/view_table", response_class=HTMLResponse)
+def pcap_view_table(request: Request, dir: str = Query(...), file: str = Query(...),
+                    dfilter: str | None = None, count: int = 100):
+    base = os.path.join(SETTINGS.pcap_root, "" if dir == "." else dir)
+    full = os.path.join(base, file)
+    rows = preview_rows(full, dfilter=dfilter, count=count)
+    return templates.TemplateResponse("pcap_table.html", {"request": request, "rows": rows})
+
+# 파일 다운로드
+@app.get("/pcaps/download")
+def pcap_download(dir: str = Query(...), file: str = Query(...)):
+    base = os.path.join(SETTINGS.pcap_root, "" if dir == "." else dir)
+    full = os.path.join(base, file)
+    return FileResponse(full, media_type="application/vnd.tcpdump.pcap", filename=file)
 
 @app.get("/pcaps/ips", response_class=HTMLResponse)
 def pcaps_ips(request: Request, dir: str = Query(...), file: str = Query(...)):

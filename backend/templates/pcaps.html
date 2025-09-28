@@ -17,6 +17,9 @@
         <div class="flex items-center justify-between border p-2 rounded-xl">
           <span>{{ f }}</span>
           <div class="space-x-2">
+            <!-- 기존 버튼 옆에 추가 -->
+            <a class="px-2 py-1 bg-slate-200 rounded"
+              href="/pcaps/view?dir={{ node.dir }}&file={{ f }}">View</a>
             <button class="px-2 py-1 bg-slate-100 rounded" 
               hx-get="/pcaps/ips?dir={{ node.dir }}&file={{ f }}" hx-target="#ip-panel" hx-swap="innerHTML">IPs</button>
             <button class="px-2 py-1 bg-slate-800 text-white rounded"

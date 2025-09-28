@@ -1,0 +1,28 @@
+<table class="min-w-full table-fixed text-xs">
+  <thead class="bg-slate-100">
+    <tr>
+      <th class="text-left px-2 py-1 w-16">No</th>
+      <th class="text-left px-2 py-1 w-28">Time</th>
+      <th class="text-left px-2 py-1 w-48">Src</th>
+      <th class="text-left px-2 py-1 w-48">Dst</th>
+      <th class="text-left px-2 py-1 w-20">Proto</th>
+      <th class="text-right px-2 py-1 w-16">Len</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr class="border-b">
+      <td class="px-2 py-1">{{ r.no }}</td>
+      <td class="px-2 py-1">{{ r.time }}</td>
+      <td class="px-2 py-1 font-mono">{{ r.src }}</td>
+      <td class="px-2 py-1 font-mono">{{ r.dst }}</td>
+      <td class="px-2 py-1">{{ r.proto }}</td>
+      <td class="px-2 py-1 text-right">{{ r.len }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if not rows %}
+<div class="text-sm text-slate-500">No packets (필터를 확인하세요).</div>
+{% endif %}
+
